@@ -1,11 +1,11 @@
-=<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="utf-8" />
-  <title>Mapping Favorable Chanterelle Habitat in Rhode Island</title>
+  <title>Mapping Favorable Chanterelle Habitat</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 
   <style>
@@ -30,21 +30,26 @@
     h2 { color: #8fbf7f; }
 
     #map {
-      height: 75vh;
+      height: 70vh;
       width: 100%;
     }
 
     .card {
       background: #17251b;
-      padding: 18px;
-      border-radius: 10px;
-      margin-top: 15px;
       border: 1px solid #314537;
+      border-radius: 10px;
+      padding: 18px;
+      margin-top: 15px;
     }
 
     .highlight {
       color: #f0b84f;
       font-weight: bold;
+    }
+
+    .note {
+      color: #ccc;
+      font-size: 0.9rem;
     }
   </style>
 </head>
@@ -52,31 +57,39 @@
 <body>
 
 <header>
-  <h1>Mapping Favorable Chanterelle Habitat</h1>
-  <p>Using soils and forest data to identify high-probability locations in Rhode Island</p>
+  <h1>🌳 Mapping Favorable Chanterelle Habitat in Rhode Island</h1>
+  <p>
+    Using soils and forest data to identify where chanterelles are most likely to grow.
+  </p>
 </header>
 
 <section>
-  <h2>Problem</h2>
+  <h2>Problem & Motivation</h2>
   <p>
-    Chanterelles depend on specific soil and forest conditions, but most foraging is trial and error.
-    I wanted to use GIS data to identify favorable environments before going into the field.
+    Chanterelles grow in specific ecological conditions, but most foraging relies on trial and error.
+    I wanted to use public environmental data to predict where favorable conditions exist before going into the field.
   </p>
 </section>
 
 <div id="map"></div>
 
 <section>
+  <p class="note">
+    This map shows a lightweight sample of the full dataset for performance.
+  </p>
+</section>
+
+<section>
   <h2>Datasets</h2>
 
   <div class="card">
     <strong>Soils 2025</strong><br>
-    Detailed soil map units from the Rhode Island Soil Survey Program.
+    Detailed soil map unit polygons from the Rhode Island Soil Survey Program (URI EDC + RIGIS).
   </div>
 
   <div class="card">
-    <strong>Ecological Communities (2011)</strong><br>
-    Statewide forest and habitat classification derived from imagery and LiDAR.
+    <strong>Ecological Communities Classification (2011)</strong><br>
+    Statewide habitat classification derived from imagery, LiDAR, and land cover data.
   </div>
 
 </section>
@@ -85,45 +98,88 @@
   <h2>Approach</h2>
 
   <ul>
-    <li><span class="highlight">Lippitt gravelly sandy loam (LgC)</span> – well-drained upland soils</li>
-    <li><span class="highlight">Canton & Charlton very stony fine sandy loams (ChC)</span> – classic upland forest soils</li>
-    <li><span class="highlight">Canton–Charlton–Rock outcrop complex (CaD)</span> – rocky ridge habitat</li>
-    <li><span class="highlight">Hinckley gravelly sandy loam (HkC)</span> – sandy, well-drained soils</li>
-    <li><span class="highlight">Sutton extremely stony fine sandy loam (SvB)</span> – coarse upland soils</li>
+    <li>Selected favorable upland soils based on drainage and texture</li>
+    <li>Selected forest habitats with likely mycorrhizal host trees</li>
+    <li>Intersected soil and habitat layers</li>
+    <li>Exported result as GeoJSON</li>
   </ul>
 
-  <p>
-    Combined with:
-  </p>
+</section>
 
-  <ul>
-    <li>Oak Forest</li>
-    <li>Hemlock/Hardwood Forest</li>
-    <li>Mixed Deciduous/Coniferous Forests</li>
-  </ul>
+<section>
+  <h2>Prime Habitat Types</h2>
+
+  <div class="card">
+    <h3>🌳 Oak Forest</h3>
+    <p><strong>Best soils:</strong></p>
+    <ul>
+      <li>Canton & Charlton very stony fine sandy loams (ChB / ChC / ChD)</li>
+      <li>Canton–Charlton–Rock outcrop complex (CaC / CaD)</li>
+      <li>Hinckley gravelly sandy loam (HkC / HkD)</li>
+      <li>Lippitt gravelly sandy loam (LgC)</li>
+      <li>Sutton extremely stony fine sandy loam (SuB)</li>
+    </ul>
+    <p class="highlight">Highest-probability: ChC + Oak Forest</p>
+  </div>
+
+  <div class="card">
+    <h3>🌲 Hemlock / Hardwood Forest</h3>
+    <p><strong>Best soils:</strong></p>
+    <ul>
+      <li>Hinckley soils (HkA / HkC / HkD)</li>
+      <li>Canton & Charlton soils (ChC)</li>
+      <li>Sutton soils (SvB)</li>
+      <li>Lippitt soils (LgC)</li>
+    </ul>
+    <p class="highlight">Highest-probability: HkC + Hemlock/Hardwood</p>
+  </div>
+
+  <div class="card">
+    <h3>🌿 Mixed Forest</h3>
+    <p><strong>Best soils:</strong></p>
+    <ul>
+      <li>Hinckley gravelly sandy loam (HkC)</li>
+      <li>Canton & Charlton soils (ChC)</li>
+      <li>Canton–Charlton–Rock outcrop complex (CaD)</li>
+      <li>Lippitt soils (LgC)</li>
+      <li>Woodbridge soils (WoB)</li>
+    </ul>
+  </div>
+
+  <div class="card">
+    <h3>🍁 Northern Hardwood Forest</h3>
+    <p><strong>Best soils:</strong></p>
+    <ul>
+      <li>Canton & Charlton soils (ChC)</li>
+      <li>Canton–Charlton–Rock outcrop complex (CaD)</li>
+      <li>Sutton soils (SvB)</li>
+      <li>Charlton extremely stony soils (CeC)</li>
+    </ul>
+  </div>
 
 </section>
 
 <section>
   <h2>Solution</h2>
   <p>
-    I intersected soil polygons with forest habitat polygons to isolate areas where both conditions align.
-    The result is a GeoJSON layer of favorable chanterelle habitat.
+    The result is a spatial layer highlighting areas where soil and forest conditions align.
+    Instead of searching randomly, this map identifies high-value areas to prioritize in the field.
   </p>
 </section>
 
 <section>
-  <h2>Action</h2>
+  <h2>Connection to Upstream Carbon</h2>
   <p>
-    I published the dataset to GitHub and built this interactive map to guide real-world scouting.
+    This project reflects how I approach land analysis: combining datasets, filtering for meaningful signals,
+    and producing outputs that guide real-world decisions.
   </p>
 </section>
 
 <script>
-  const map = L.map("map").setView([41.7, -71.5], 9);
+  const map = L.map('map').setView([41.7, -71.5], 9);
 
-  L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
-    attribution: "&copy; OpenStreetMap contributors"
+  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    attribution: '&copy; OpenStreetMap contributors'
   }).addTo(map);
 
   const geojsonURL =
@@ -133,6 +189,7 @@
     .then(res => res.json())
     .then(data => {
 
+      // reduce size for browser performance
       const reduced = {
         type: "FeatureCollection",
         features: data.features.filter((_, i) => i % 20 === 0)
